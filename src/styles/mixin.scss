@@ -1,0 +1,42 @@
+@mixin linear(
+    $reverse: 0,
+    $direction: right
+) {
+    @if $reverse == 1 {
+        background: linear-gradient(to $direction, #E1CC99, #D5B669);
+    } @else {
+        background: linear-gradient(to $direction, #D5B669, #E1CC99);
+    }
+}
+
+.cusMask{
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+}
+
+@mixin colorfulCard(
+    $radius,
+    $bg: linear-gradient(180deg, rgba(#CB78FD, 0.2) 0%, rgba(#B1E7FE, 0.2) 50%, rgba(#2F6CFE, 0.2) 100%),
+    $border: linear-gradient(180deg, #CB78FD 0%, #B1E7FE 50%, #2F6CFE 100%),
+    $borderWidth: 1px
+) {
+    border-radius: $radius;
+    border: $borderWidth solid transparent;
+    position: relative;
+    background: $bg padding-box;
+
+    &::before {
+        content: '';
+        position: absolute;
+        inset: -$borderWidth;
+        padding: $borderWidth;
+        border-radius: inherit;
+        background: $border;
+        pointer-events: none;
+        mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        mask-composite: exclude;
+        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+    }
+}

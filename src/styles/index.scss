@@ -1,0 +1,215 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    font-family: Inter, system-ui, Avenir, 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB',
+        'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-tap-highlight-color: transparent;
+}
+@font-face {
+    font-family: 'font1';
+    src: url('@/assets/font/text.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+.font1{
+    font-family: 'font1' !important;
+}
+@font-face {
+    font-family: 'font2';
+    src: url('@/assets/font/facon.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+.font2{
+    font-family: 'font2' !important;
+}
+// 底部系统安全距离，meta标签里需设置viewport-fit=cover
+.safeArea{
+	width: 100vw;
+	height: env(safe-area-inset-bottom);
+}
+.safeTop{
+    width: 100%;
+    height: env(safe-area-inset-top);
+}
+// 去除input默认样式
+input{
+    background-color: transparent;
+    border: none;
+    width: 50px;
+}
+/* 隐藏数字输入框的加减按钮 */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+// 去除图片样式
+img{
+    display: block;
+}
+.rich{
+    img{
+        max-width: 100% !important;
+        height: auto;
+    }
+}
+// 管理头像圆角，裁剪
+.avatar{
+    border-radius: 50%;
+    object-fit: cover;
+}
+// 字体对齐
+.tl{
+    text-align: left;
+}
+.tc{
+    text-align: center;
+}
+.tr{
+    text-align: right;
+}
+// 字体加粗
+.bold{
+    font-weight: bold;
+}
+// 纯字母数字数据强制换行
+.br{
+	word-break: break-all;
+	word-wrap: break-word;
+	line-break: anywhere;
+}
+.rel{
+    position: relative;
+    z-index: 1;
+}
+// 过渡
+.ani{
+    transition: all 0.3s;
+}
+// 动画速度 0.1~10 秒
+// ani1 ~ ani10
+@for $i from 1 through 10 {
+	.ani#{$i} {
+		animation-duration: calc($i / 10) + s !important;
+	}
+    .opc#{$i} {
+		opacity: calc($i / 10) !important;
+	}
+}
+
+// flex 布局
+.flex {
+	display: flex;
+}
+.flex0{
+	flex-shrink: 0;
+}
+.col {
+	flex-direction: column;
+}
+.wrap {
+	flex-wrap: wrap;
+}
+.as {
+	align-items: flex-start;
+}
+.ae {
+	align-items: flex-end;
+}
+.ac {
+	align-items: center;
+}
+.js {
+	justify-content: flex-start;
+}
+.je {
+	justify-content: flex-end;
+}
+.jc {
+	justify-content: center;
+}
+.jb {
+	justify-content: space-between;
+}
+.ja{
+	justify-content: space-around;
+}
+// 均分 flex1 ~ flex5
+@for $i from 1 through 5 {
+	.flex#{$i} {
+		flex: $i;
+	}
+}
+
+// 文本超出 1~5 行转省略号
+// line1 ~ line5
+@for $i from 1 through 5 {
+	.line#{$i} {
+		@if $i == '1' {
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+		} @else {
+			display: -webkit-box!important;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			word-break: break-all;
+			-webkit-line-clamp: $i;
+			-webkit-box-orient: vertical!important;
+		}
+	}
+}
+
+// 字体大小： size0 ~ size200
+// 字体行高： lh0 ~ lh200
+// 正方形图片： img0 ~ img200
+// 外边距： mt/r/b/l/0 ~ mt/r/b/l/200
+// 内边距： pt/r/b/l/0 ~ pt/r/b/l/200
+// 占位盒子，能被5或10整除： gap5 ~ gap200
+@for $i from 0 through 200 {
+    @if $i % 2 == 0 or $i % 5 == 0 {
+        .size#{$i} {
+            font-size: $i + px;
+        }
+
+        .img#{$i} {
+            width: $i + px;
+            height: $i + px;
+        }
+
+        .lh#{$i} {
+            line-height: $i + px;
+        }
+
+        @each $short,
+        $long in l left,
+        t top,
+        r right,
+        b bottom {
+            .m#{$short}#{$i} {
+                margin-#{$long}: $i + px;
+            }
+
+            .p#{$short}#{$i} {
+                padding-#{$long}: $i + px;
+            }
+        }
+    }
+    @if $i % 5 == 0 {
+        .gap#{$i} {
+            width: 100%;
+            height: $i + px;
+        }
+    }
+}

@@ -1,0 +1,12 @@
+import { createPinia } from 'pinia';
+import type { App } from 'vue';
+
+const pinia = createPinia();
+
+export function setupStore(app: App<Element>) {
+    app.use(pinia);
+}
+
+export * from './modules/app';
+export * from './modules/dapp';
+export * from './modules/user';

@@ -1,0 +1,41 @@
+.main{ color: $main-color; }
+.white{ color: $white; } 
+.black{ color: $black; }
+.gray{ color: $gray; }
+.grey{ color: $grey; }
+.green{ color: $green; }
+.red{ color: $red; }
+.blue{ color: $blue; }
+.yellow{ color: $yellow; }
+.purple{ color: $purple; }
+
+.bgMain{ background-color: $main-color; }
+.bgWhite{ background-color: $white; }
+.bgBlack{ color: $black; }
+.bgGray{ color: $gray; }
+.bgGrey{ color: $grey; }
+.bgGreen{ color: $green; }
+.bgRed{ color: $red; }
+.bgBlue{ color: $blue; }
+.bgYellow{ color: $yellow; }
+.bgPurple{ color: $purple; }
+
+body{
+    background-color: #00084F;
+    color: #FFFFFF;
+}
+
+input{
+    &::placeholder{
+        color: #7F84B3;
+    }
+}
+
+.linearTxt{
+    display: inline-block;
+    background: linear-gradient(to right, #D692FF, #BEE5FF, #2FFEF0);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+}

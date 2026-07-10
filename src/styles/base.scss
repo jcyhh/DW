@@ -1,0 +1,74 @@
+@keyframes breathe {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.3);
+    opacity: 0.8;
+  }
+}
+
+.breathe {
+  animation: breathe 2s ease-in-out infinite;
+}
+
+@keyframes roleAni {
+  0%, 100% {
+    transform: scaleX(1);
+    transform: scaleY(1);
+  }
+  50% {
+    transform: scaleX(1.06);
+    transform: scaleY(1.02);
+  }
+}
+
+.roleAni {
+  transform-origin: center bottom;
+  animation: roleAni 1.5s ease-in-out infinite;
+}
+
+.cell{
+  width: 100%;
+  height: 94px;
+  background-image: url('@/assets/home/21.png');
+  background-size: 100% 100%;
+  padding: 0 30px;
+  font-size: 26px;
+  font-weight: bold;
+  color: #000000;
+}
+.titleBox{
+  width: 590px;
+  height: 128px;
+  background-image: url('@/assets/home/3.png');
+  background-size: 100% 100%;
+  span{
+      background: linear-gradient(#F2F2F0, #FFFFC0);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+      text-shadow: 0 0 20px #FFF07B80;
+  }
+}
+
+.popup{
+  width: 650px;;
+  padding: 30px;
+  @include colorfulCard(30px);
+  .popbtn{
+    width: 100%;
+            height: 88px;
+            line-height: 88px;
+            background-image: url("@/assets/home/btn1.png");
+            background-size: 100% 100%;
+  }
+  .popinp{
+    padding: 24px 30px;
+    border-radius: 20px;
+    color: #333333;
+    background-color: #FFFFFF;
+  }
+}
