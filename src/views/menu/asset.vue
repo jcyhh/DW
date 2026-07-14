@@ -47,6 +47,12 @@
                         <div class="size28" v-init="equity"></div>
                     </div>
                 </div>
+                <div class="flex jb ac mt36">
+                    <div class="size28">{{ $t('红包') }}</div>
+                    <div class="flex ac">
+                        <div class="size28" v-init="balance_partner_usdt"></div>
+                    </div>
+                </div>
             </div>
             <div class="flex jb ac mt40">
                 <div class="btn btn1" @click="open">
@@ -72,10 +78,10 @@
             v-on-show="'animate__flipInY'">
             <span>USDT {{ $t('明细') }}</span>
         </div>
-        <!-- <div class="tab flex0 delay3" :class="current == 3 ? 'tabAct' : 'tabDef'" @click="tabsClick(3)"
+        <div class="tab flex0 delay3" :class="current == 3 ? 'tabAct' : 'tabDef'" @click="tabsClick(3)"
             v-on-show="'animate__flipInY'">
-            <span>{{ $t('DN明细') }}</span>
-        </div> -->
+            <span>{{ $t('红包') }}</span>
+        </div>
     </div>
 
     <van-pull-refresh v-bind="props">
@@ -99,7 +105,7 @@
                             <div v-if="current == 0">DW</div>
                             <div v-else-if="current == 1">USDT</div>
                             <div v-else-if="current == 2">DN</div>
-                            <div v-else>{{ $t('DN') }}</div>
+                            <div v-else>{{ $t('红包') }}</div>
                         </div>
                     </CusCard>
                 </div>
@@ -131,6 +137,9 @@
                     <div v-else-if="cur == 2">
                         <span v-init="balance_ecc"></span> DN
                     </div>
+                    <div v-else-if="cur == 3">
+                        <span v-init="balance_partner_usdt"></span> {{ $t('红包') }}
+                    </div>
                 </div>
             </div>
             <div class="flex jb ac popinp mt28">
@@ -144,7 +153,13 @@
 
             <div class="flex jb ac size24 mt30">
                 <div>{{ $t('币种') }}</div>
-                <div class="opc6">{{ $t('手续费') }} {{ cur == 2 ? ecc_fee_rate : fee }}%</div>
+                <div class="opc6">
+                    <span>{{ $t('手续费') }}</span>
+                    <span v-if="cur == 2">{{ ecc_fee_rate }}</span>
+                    <span v-else-if="cur == 3">{{ partner_fee_rate }}</span>
+                    <span v-else>{{ fee }}</span>
+                    %
+                </div>
             </div>
             <div class="flex jb ac popinp mt28" @click="pickerRef.open(cur)">
                 <div>{{ types[cur].name }}</div>
@@ -200,13 +215,14 @@ watch(address, async (val) => {
 }, { immediate: true })
 
 const transferRef = ref()
-const swapRef = ref()
 
 const fee = ref(0)
 const ecc_fee_rate = ref(0)
+const partner_fee_rate = ref(0)
 apiGet('/api/withdraws/fee').then((res: any) => {
     fee.value = res.fee_rate
     ecc_fee_rate.value = res.ecc_fee_rate
+    partner_fee_rate.value = res.partner_fee_rate
 })
 
 const price = ref(0)
@@ -224,6 +240,7 @@ const balance_token = ref(0)
 const balance_ecc = ref(0)
 const balance_bean = ref(0)
 const equity = ref(0)
+const balance_partner_usdt = ref(0)
 const token_total_usdt = computed(() => {
     if (balance_token.value && price.value) return computedMul(balance_token.value, price.value)
     else return 0
@@ -239,6 +256,7 @@ const loadBalance = () => {
         balance_ecc.value = res.balance_ecc
         balance_bean.value = res.balance_bean
         equity.value = res.equity
+        balance_partner_usdt.value = res.balance_partner_usdt
     })
 }
 loadBalance()
@@ -250,7 +268,7 @@ const tabsClick = (index: number) => {
     loadList()
 }
 
-const params = computed(() => ({ ccy: current.value == 3 ? 'balance_bean' : types.value[current.value].value }))
+const params = computed(() => ({ ccy: current.value == 3 ? 'balance_partner_usdt' : types.value[current.value].value }))
 const { list, props: listProps, loadList } = useLoadList('/api/users/my/balance_logs', 'balance_logs', params)
 const { props } = usePullRefresh(loadList)
 loadList()
@@ -260,7 +278,8 @@ const cur = ref(0)
 const types = computed(() => ([
     { name: 'DW', value: 'balance_token' },
     { name: 'USDT', value: 'balance_usdt' },
-    { name: 'DN', value: 'balance_ecc' }
+    { name: 'DN', value: 'balance_ecc' },
+    { name: `${t('红包')}`, value: 'balance_partner_usdt' }
 ]))
 
 const show = ref(false)

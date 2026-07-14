@@ -17,7 +17,7 @@ export function useProject (contractAddress: string = import.meta.env.VITE_PROJE
         contract = new ethers.Contract(contractAddress, abi, provider).connect(signer)
     }
 
-    const writeContract = async (method: 'deposit' | 'withdraw', params: any) => {
+    const writeContract = async (method: 'deposit' | 'withdraw' | 'buyNode', params: any) => {
         console.log(params);
         try {
             showLoading()
@@ -38,9 +38,12 @@ export function useProject (contractAddress: string = import.meta.env.VITE_PROJE
 
     const writeWithdraw = async (params: any) => writeContract('withdraw', params)
 
+    const writeBuyNode = async (params: any) => writeContract('buyNode', params)
+
     return {
         init,
         writeDeposit,
-        writeWithdraw
+        writeWithdraw,
+        writeBuyNode
     }
 }

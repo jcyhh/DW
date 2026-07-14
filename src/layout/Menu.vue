@@ -22,7 +22,7 @@
 
                 <div class="menuitem mt80" @click="jump('/team')">{{ $t('我的团队') }}</div>
 
-                <!-- <div class="menuitem mt80" @click="jump('/partner')">{{ $t('合伙人') }}</div> -->
+                <div class="menuitem mt80" @click="jump('/partner')">{{ $t('生态合伙人') }}</div>
 
                 <div class="menuitem mt80" @click="jump('/game')">{{ $t('游戏') }}</div>
                 

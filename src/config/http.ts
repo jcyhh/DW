@@ -29,3 +29,6 @@ export type Api =
 | '/api/beans/config'
 | '/api/beans/exchange'
 | '/api/beans/redeem'
+| '/api/partner_orders/config'
+| '/api/partner_orders'
+| '/api/partner_orders'

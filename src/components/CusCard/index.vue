@@ -1,5 +1,5 @@
 <template>
-    <div class="cuscard">
+    <div class="cuscard" :class="{logcard:type==1}">
         <img src="./1.png" class="pic1">
         <img src="./2.png" class="pic2">
         <img src="./3.png" class="pic3" v-if="type==0">
@@ -86,5 +86,12 @@ defineProps({
         height: 1px;
         background: linear-gradient(90deg, rgba(139, 114, 254, 0) 0%, #8B72FE 50%, rgba(139, 114, 254, 0) 100%);
     }
+}
+.logcard{
+    @include colorfulCard(
+        30px,
+        #040742CC,
+        linear-gradient(180deg, #2F6CFE 0%, #B1E7FE 50%, #CB78FD 100%)
+    );
 }
 </style>
