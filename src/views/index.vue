@@ -8,15 +8,13 @@
 <script setup lang="ts">
 import { homePath } from '@/config/index';
 import { getRef, getToken, setRef, setToken } from '@/config/storage';
-import { useEthers } from '@/dapp';
+import { loginWithWallet } from '@/dapp/walletLogin';
 import { routerReplace } from '@/router';
 import { useDappStore } from '@/store';
 import { apiPost } from '@/utils/request';
 import { storeToRefs } from 'pinia';
 import { watch } from 'vue';
 import { useRoute } from 'vue-router';
-
-const { getSign } = useEthers()
 
 const dappStore = useDappStore()
 const { address, hasMetaMask } = storeToRefs(dappStore)
@@ -32,11 +30,11 @@ watch(address, async (val)=>{
 
 // 钱包登录
 const loginIn = async () => {
-    const signInfo = await getSign('Login')
-    apiPost('/api/auth/login',{
+    const { ethereum } = window as any
+    const loginInfo = await loginWithWallet(ethereum)
+    apiPost('/api/auth/login', {
         ref: getRef(),
-        address: address.value,
-        ...signInfo
+        ...loginInfo
     }).then((res:any)=>{
         setToken(res.token)
         routerReplace(homePath)

@@ -52,8 +52,8 @@ export function useEthers() {
         await detectEthereumProvider();
         provider = new ethers.BrowserProvider(ethereum);
         signer = await provider.getSigner();
-        const address = signer.address
-        setAddress(signer.address)
+        const address = await signer.getAddress()
+        setAddress(address)
         return { provider, signer, address }
     }
 

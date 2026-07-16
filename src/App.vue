@@ -13,7 +13,7 @@ import { useEthers } from '@/dapp';
 import { routerReplace } from './router';
 import { useDappStore } from './store';
 import { storeToRefs } from 'pinia';
-import { delToken } from './config/storage';
+import { delAddress, delToken, setAddress } from './config/storage';
 
 const dappStore = useDappStore()
 const { hasMetaMask, address } = storeToRefs(dappStore)
@@ -39,16 +39,32 @@ const init = async () => {
 
 // 创建监听
 const createListener = () => {
-    ethereum.on('accountsChanged', handlerChanged); // 账户切换或断开钱包链接
-    ethereum.on('chainChanged',  handlerChanged); // 网络切换
+    ethereum.on('accountsChanged', handlerAccountsChanged); // 账户切换或断开钱包链接
+    ethereum.on('chainChanged',  handlerChainChanged); // 网络切换
 }
 // 移除监听
 const removeListener = () => {
-    ethereum.off('accountsChanged', handlerChanged);
-    ethereum.off('chainChanged',  handlerChanged);
+    ethereum.off('accountsChanged', handlerAccountsChanged);
+    ethereum.off('chainChanged',  handlerChainChanged);
 }
-// 回调：账户切换、断开钱包链接、网络切换
-const handlerChanged = async () => {    
+
+// 回调：账户切换或断开钱包链接
+const handlerAccountsChanged = (accounts: string[]) => {
+    const walletAddress = accounts?.[0] || ''
+
+    delToken()
+    routerReplace(startPath)
+
+    if(walletAddress){
+        setAddress(walletAddress)
+    }else{
+        delAddress()
+    }
+    address.value = walletAddress
+}
+
+// 回调：网络切换
+const handlerChainChanged = async () => {    
     address.value = ''
     delToken()
     removeListener();
