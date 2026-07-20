@@ -3,9 +3,11 @@ import { getToken, getAddress, delToken } from '../config/storage'
 import { langKey, addressKey, uploadApi, uploadFileName, timeOut, uploadTimeOut, type Api } from '../config/http'
 import { getHeaderLang } from '../locale'
 import { closeToast, showLoadingToast, showToast } from 'vant';
-import { router, routerPush } from '@/router';
+import { router } from '@/router';
 import { startPath } from '@/config';
 import { useDappStore } from '@/store';
+
+const walletInitEvent = 'wallet:init'
 
 const service = axios.create({
     baseURL: import.meta.env.VITE_BASE_URL,
@@ -98,5 +100,8 @@ export function logout() {
     const useStore = useDappStore()
     useStore.address = ''
     const currentRoute = router.currentRoute.value
-    if(currentRoute.path!==startPath)routerPush(startPath)
+    const redirect = currentRoute.path!==startPath ? router.push(startPath) : Promise.resolve()
+    redirect.finally(() => {
+        window.dispatchEvent(new Event(walletInitEvent))
+    })
 }

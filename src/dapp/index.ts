@@ -8,52 +8,29 @@ import { getAddress, setAddress } from "@/config/storage";
 
 export function useEthers() {
 
-    const { ethereum } = window as any
     let provider: any = null; // 提供者
     let signer: any = null; // 签名器
+    const getEthereum = () => (window as any).ethereum
 
     // 是否有MetaMask环境
     const checkMetaMask = async () => {
-        const maxRetries = 3;
-        let retryCount = 0;
-        
-        while (retryCount < maxRetries) {
-            try {
-                const metamask = await detectEthereumProvider();
-                const result = metamask ? (metamask === ethereum ? 1 : 2) : 2;
-                
-                // 如果检测到 MetaMask (结果为1)，立即返回
-                if (result === 1) {
-                    return 1;
-                }
-                
-                retryCount++;
-                
-                // 如果不是最后一次重试，等待一段时间再重试
-                if (retryCount < maxRetries) {
-                    await new Promise(resolve => setTimeout(resolve, 1000));
-                }
-            } catch (error) {
-                retryCount++;
-                
-                // 如果不是最后一次重试，等待一段时间再重试
-                if (retryCount < maxRetries) {
-                    await new Promise(resolve => setTimeout(resolve, 1000));
-                }
-            }
+        try {
+            const metamask = await detectEthereumProvider({ timeout: 15000 });
+            return metamask && metamask === getEthereum() ? 1 : 2;
+        } catch (error) {
+            return 2;
         }
-        
-        // 三次检测都失败，返回2
-        return 2;
     }
 
     // 链接钱包
     const connectWallet = async () => {
-        await detectEthereumProvider();
+        await detectEthereumProvider({ timeout: 15000 });
+        const ethereum = getEthereum();
+        if(!ethereum)throw new Error('Wallet provider not found');
         provider = new ethers.BrowserProvider(ethereum);
         signer = await provider.getSigner();
-        const address = await signer.getAddress()
-        setAddress(address)
+        const address = signer.address
+        setAddress(signer.address)
         return { provider, signer, address }
     }
 
@@ -69,6 +46,7 @@ export function useEthers() {
     // 切换网络
     const switchChain = async (chainInfo:any) => {
         if(!import.meta.env.PROD)return true
+        const ethereum = getEthereum()
         try {
             // 切换至目标网络
             await ethereum.request({
@@ -91,6 +69,7 @@ export function useEthers() {
 
     // 获取签名
     const getSign = async (message: SignMessage) => {
+        const ethereum = getEthereum()
         const _provider = new ethers.BrowserProvider(ethereum);
         const _signer = await _provider.getSigner();
         const timestamp = Math.floor(Date.now() / 1000);
@@ -100,6 +79,7 @@ export function useEthers() {
 
     // 检查Gas是否足够
     const checkGas = async () => {
+        const ethereum = getEthereum()
         const result = await ethereum.request({
             method: 'eth_getBalance',
             params: [getAddress(), "latest"]
