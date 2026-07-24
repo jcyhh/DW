@@ -13,6 +13,11 @@
                 <span v-init="info?.xq_kpi"></span>
                 <span class="ml5">USDT</span>
             </div>
+            <div class="size28 mt20">
+                <span class="opc6 mr10">{{ $t('团队合伙人业绩') }}</span>
+                <span v-init="info?.partner_team_kpi"></span>
+                <span class="ml5">USDT</span>
+            </div>
             <div class="box mt40">
                 <div class="flex jb ac">
                     <div class="opc6">{{ $t('团队人数') }}</div>
@@ -60,6 +65,20 @@
                             <div class="size24">{{ $t('个人业绩') }}</div>
                             <div class="sze28">
                                 <span v-init="item.kpi"></span>
+                                USDT
+                            </div>
+                        </div>
+                        <div class="flex jb mt20">
+                            <div class="size24">{{ $t('团队合伙人业绩') }}</div>
+                            <div class="sze28">
+                                <span v-init="item.partner_team_kpi"></span>
+                                USDT
+                            </div>
+                        </div>
+                        <div class="flex jb mt20">
+                            <div class="size24">{{ $t('个人合伙人业绩') }}</div>
+                            <div class="sze28">
+                                <span v-init="item.partner_kpi"></span>
                                 USDT
                             </div>
                         </div>
